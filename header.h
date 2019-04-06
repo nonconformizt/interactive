@@ -11,10 +11,10 @@
 
 using namespace std;
 
-#define WINDOW_WIDTH (960)
+#define WINDOW_WIDTH (1440)
 #define WINDOW_HEIGHT (720)
 
-#define BALL_COUNT 10
+#define BALL_COUNT 30
 #define STEP 3
 
 bool SDL_Start(SDL_Window ** window, SDL_Renderer ** renderer);

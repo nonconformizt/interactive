@@ -55,7 +55,7 @@ SDL_Texture *get_ball_text_texture(SDL_Renderer * renderer, char * text, TTF_Fon
 {
     SDL_Surface *textSurface = nullptr;
 
-    SDL_Color fore_color = { 0, 0, 0, 0 };
+    SDL_Color fore_color = { 255, 255, 255, 0 };
     SDL_Color back_color = { 0, 0, 0, 1 };
 
     textSurface = TTF_RenderText_Shaded(font, text, fore_color, back_color);
@@ -67,13 +67,15 @@ SDL_Texture *get_ball_text_texture(SDL_Renderer * renderer, char * text, TTF_Fon
 void init_balls(SDL_Rect balls[], int prices[], int count)
 {
     srand(time(nullptr));
+    int rand_size;
 
     for (int i = 0; i < count; i++) {
+        rand_size = (rand() % (100 - 35 + 1)) + 35;
         balls[i] = {
                 rand() % (WINDOW_WIDTH - 20),
                 rand() % (WINDOW_HEIGHT - 20),
-                50 + 10 * i,
-                50 + 10 * i
+                rand_size,
+                rand_size
         };
         prices[i] = rand() % 8 + 1;
     }
@@ -91,12 +93,15 @@ void draw_balls(SDL_Renderer* renderer, SDL_Rect balls[],
 
 void draw_text(SDL_Renderer* renderer, SDL_Texture* texture)
 {
-    SDL_Rect rect = { 0,0, 70, 100};
+    SDL_Rect rect = { 0,0, 70, 100 };
     SDL_RenderCopy(renderer, texture, nullptr, &rect);
 }
 
 void draw_ball_text(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect ball_rect)
 {
+    ball_rect.w = int(0.7 * ball_rect.w);
+    ball_rect.x += int(0.15 * ball_rect.w);
+    ball_rect.y += int(0.05 * ball_rect.w);
     SDL_RenderCopy(renderer, texture, nullptr, &ball_rect);
 }
 

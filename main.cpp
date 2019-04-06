@@ -22,8 +22,11 @@ int main(int argc, char **argv) {
     init_balls(balls, prices, BALL_COUNT);
 
     SDL_Surface *ballImage = IMG_Load("ball.png");
-    SDL_SetColorKey(ballImage, SDL_TRUE, SDL_MapRGB(ballImage->format, 255, 255, 255));
     SDL_Texture * ball = SDL_CreateTextureFromSurface(rend, ballImage);
+    SDL_FreeSurface(ballImage);
+
+    ballImage = IMG_Load("active.png");
+    SDL_Texture * active = SDL_CreateTextureFromSurface(rend, ballImage);
     SDL_FreeSurface(ballImage);
 
 
@@ -69,14 +72,8 @@ int main(int argc, char **argv) {
             else if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT)
                 for (int i = 0; i < BALL_COUNT; i++)
                     // если нажали на мячик, то сделать его активным
-                    if (is_mouse_hit(balls[i], e.button.x, e.button.y)) {
-//                        balls[i].w = balls[i].h = 0;
-//                        k += prices[i];
-//                        _itoa(k, text_val, 10);
-//                        SDL_DestroyTexture(text);
-//                        text = get_text_texture(rend, text_val, my_font);
+                    if (is_mouse_hit(balls[i], e.button.x, e.button.y))
                         activated_ball = i;
-                    }
 
         SDL_SetRenderDrawColor(rend, 0, 0, 0, 0);
         SDL_RenderClear(rend);
@@ -90,15 +87,35 @@ int main(int argc, char **argv) {
         if (is_left)
             balls[activated_ball].x -= STEP;
 
+        if (activated_ball != BALL_COUNT) {
+            for (int i = 0; i < BALL_COUNT; i++)
+                if (i == activated_ball)
+                    continue;
+                else if (is_balls_hit(balls[i], balls[activated_ball])) {
+                    balls[i].w = balls[i].h = 0;
+                    k += prices[i];
+                    _itoa(k, text_val, 10);
+                    SDL_DestroyTexture(text);
+                    text = get_text_texture(rend, text_val, my_font);
+                }
+        }
+
         draw_balls(rend, balls, BALL_COUNT, ball);
         for (int j = 0; j < BALL_COUNT; j++) {
+            if(j == activated_ball)
+                continue;
             _itoa(prices[j], text_val, 10);
             ball_text[j] = get_ball_text_texture(rend, text_val, my_font);
             draw_ball_text(rend, ball_text[j], balls[j]);
         }
         draw_text(rend, text);
 
-        SDL_RenderPresent(rend);
+        // draw activated
+        if (activated_ball != BALL_COUNT) {
+            SDL_RenderCopy(rend, active, nullptr, &balls[activated_ball]);
+        }
+
+            SDL_RenderPresent(rend);
 
         {
             end = chrono::high_resolution_clock::now();
