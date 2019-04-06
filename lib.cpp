@@ -8,7 +8,7 @@ bool SDL_Start(SDL_Window **window, SDL_Renderer **renderer)
     }
     IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
 
-    *window = SDL_CreateWindow("Snow",
+    *window = SDL_CreateWindow("Interactive",
                                SDL_WINDOWPOS_CENTERED,
                                SDL_WINDOWPOS_CENTERED,
                                WINDOW_WIDTH,
@@ -42,8 +42,8 @@ SDL_Texture *get_text_texture(SDL_Renderer * renderer, char * text, TTF_Font * f
 {
     SDL_Surface *textSurface = nullptr;
 
-    SDL_Color fore_color = { 130, 140, 50};
-    SDL_Color back_color = { 188, 155, 166 };
+    SDL_Color fore_color = { 210, 210, 210};
+    SDL_Color back_color = { 188, 155, 166, 1};
 
     textSurface = TTF_RenderText_Shaded(font, text, fore_color, back_color);
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, textSurface);
@@ -51,11 +51,31 @@ SDL_Texture *get_text_texture(SDL_Renderer * renderer, char * text, TTF_Font * f
     return texture;
 }
 
-void init_balls(SDL_Rect balls[], int count)
+SDL_Texture *get_ball_text_texture(SDL_Renderer * renderer, char * text, TTF_Font * font)
 {
-    for (int i = 0; i < count; i++)
-    {
-        balls[i] = { i * 100 + 110,i * 100 + 10 ,50 + 10 * i ,50 + 10 * i };
+    SDL_Surface *textSurface = nullptr;
+
+    SDL_Color fore_color = { 0, 0, 0, 0 };
+    SDL_Color back_color = { 0, 0, 0, 1 };
+
+    textSurface = TTF_RenderText_Shaded(font, text, fore_color, back_color);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, textSurface);
+    SDL_FreeSurface(textSurface);
+    return texture;
+}
+
+void init_balls(SDL_Rect balls[], int prices[], int count)
+{
+    srand(time(nullptr));
+
+    for (int i = 0; i < count; i++) {
+        balls[i] = {
+                rand() % (WINDOW_WIDTH - 20),
+                rand() % (WINDOW_HEIGHT - 20),
+                50 + 10 * i,
+                50 + 10 * i
+        };
+        prices[i] = rand() % 8 + 1;
     }
 }
 
@@ -70,6 +90,12 @@ void draw_balls(SDL_Renderer* renderer, SDL_Rect balls[],
 }
 
 void draw_text(SDL_Renderer* renderer, SDL_Texture* texture)
+{
+    SDL_Rect rect = { 0,0, 70, 100};
+    SDL_RenderCopy(renderer, texture, nullptr, &rect);
+}
+
+void draw_ball_text(SDL_Renderer* renderer, SDL_Texture* texture)
 {
     SDL_Rect rect = { 0,0, 70, 100};
     SDL_RenderCopy(renderer, texture, nullptr, &rect);

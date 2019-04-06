@@ -9,7 +9,7 @@ find_package(SDL2IMAGE REQUIRED)
 find_package(SDL2TTF REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR} ${SDL2IMAGE_INCLUDE_DIR} ${SDL2TTF_INCLUDE_DIR})
 
-add_executable(interactive main.cpp header.h lib.cpp circle.class/circle.cpp circle.class/circle.h)
+add_executable(interactive main.cpp header.h lib.cpp)
 
 target_link_libraries(
         interactive
