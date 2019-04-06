@@ -95,10 +95,9 @@ void draw_text(SDL_Renderer* renderer, SDL_Texture* texture)
     SDL_RenderCopy(renderer, texture, nullptr, &rect);
 }
 
-void draw_ball_text(SDL_Renderer* renderer, SDL_Texture* texture)
+void draw_ball_text(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect ball_rect)
 {
-    SDL_Rect rect = { 0,0, 70, 100};
-    SDL_RenderCopy(renderer, texture, nullptr, &rect);
+    SDL_RenderCopy(renderer, texture, nullptr, &ball_rect);
 }
 
 bool is_ball_hit(SDL_Rect ball, int x, int y)

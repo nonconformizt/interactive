@@ -28,4 +28,5 @@ SDL_Texture *get_ball_text_texture(SDL_Renderer * renderer, char * text, TTF_Fon
 void init_balls(SDL_Rect balls[], int prices[], int count);
 void draw_text(SDL_Renderer* renderer, SDL_Texture* texture);
 void draw_balls(SDL_Renderer* renderer, SDL_Rect balls[], int count, SDL_Texture* texture);
+void draw_ball_text(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect ball_rect);
 bool is_ball_hit(SDL_Rect ball, int x, int y);

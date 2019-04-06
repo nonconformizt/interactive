@@ -59,8 +59,10 @@ int main(int argc, char **argv) {
         SDL_RenderClear(rend);
 
         draw_balls(rend, balls, BALL_COUNT, ball);
-        for (int j = 0; j < BALL_COUNT; ++j) {
-            ball_text[j] = get_ball_text_texture(rend, (char *)"1", my_font);
+        for (int j = 0; j < BALL_COUNT; j++) {
+            _itoa(prices[j], text_val, 10);
+            ball_text[j] = get_ball_text_texture(rend, text_val, my_font);
+            draw_ball_text(rend, ball_text[j], balls[j]);
         }
         draw_text(rend, text);
 
