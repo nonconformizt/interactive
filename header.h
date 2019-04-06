@@ -14,11 +14,8 @@ using namespace std;
 #define WINDOW_WIDTH (960)
 #define WINDOW_HEIGHT (720)
 
-#define START_X int(WINDOW_WIDTH / 2)
-#define START_Y int(WINDOW_HEIGHT / 2)
-
-#define BALL_COUNT 5
-#define STEP 5
+#define BALL_COUNT 10
+#define STEP 3
 
 bool SDL_Start(SDL_Window ** window, SDL_Renderer ** renderer);
 void SDL_Exit(SDL_Window * w, SDL_Renderer * r);

@@ -28,7 +28,11 @@ int main(int argc, char **argv) {
 
 
     SDL_Event e;
-    bool close = false;
+    bool close = false,
+        is_down = false,
+        is_up = false,
+        is_right = false,
+        is_left = false;
     int activated_ball = BALL_COUNT; // if == BALL_COUNT, than inactive
 
     auto begin = chrono::high_resolution_clock::now();
@@ -45,38 +49,22 @@ int main(int argc, char **argv) {
             // если есть активный мячик
             else if (activated_ball != BALL_COUNT)
             {
-                if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_DOWN) {
-                    cout << "Down pressed!";
-                    balls[activated_ball].y += STEP;
-                }
-                else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_UP) {
-                    cout << "Up pressed!";
-                    balls[activated_ball].y -= STEP;
-                }
-                else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RIGHT) {
-                    cout << "Right pressed!";
-                    balls[activated_ball].x += STEP;
-                }
-                else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_LEFT) {
-                    cout << "Left pressed!";
-                    balls[activated_ball].x -= STEP;
-                }
-                else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_DOWN) {
-                    cout << "Down released!";
-                    balls[activated_ball].y += STEP;
-                }
-                else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_UP) {
-                    cout << "Up released!";
-                    balls[activated_ball].y -= STEP;
-                }
-                else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RIGHT) {
-                    cout << "Right released!";
-                    balls[activated_ball].x += STEP;
-                }
-                else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_LEFT) {
-                    cout << "Left released!";
-                    balls[activated_ball].x -= STEP;
-                }
+                if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_DOWN)
+                    is_down = true;
+                else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_UP)
+                    is_up = true;
+                else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RIGHT)
+                    is_right = true;
+                else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_LEFT)
+                    is_left = true;
+                else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_DOWN)
+                    is_down = false;
+                else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_UP)
+                    is_up = false;
+                else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RIGHT)
+                    is_right = false;
+                else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_LEFT)
+                    is_left = false;
             }
             else if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT)
                 for (int i = 0; i < BALL_COUNT; i++)
@@ -92,6 +80,15 @@ int main(int argc, char **argv) {
 
         SDL_SetRenderDrawColor(rend, 0, 0, 0, 0);
         SDL_RenderClear(rend);
+
+        if (is_down)
+            balls[activated_ball].y += STEP;
+        if (is_up)
+            balls[activated_ball].y -= STEP;
+        if (is_right)
+            balls[activated_ball].x += STEP;
+        if (is_left)
+            balls[activated_ball].x -= STEP;
 
         draw_balls(rend, balls, BALL_COUNT, ball);
         for (int j = 0; j < BALL_COUNT; j++) {
