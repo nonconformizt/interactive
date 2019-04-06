@@ -100,11 +100,27 @@ void draw_ball_text(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect ball_
     SDL_RenderCopy(renderer, texture, nullptr, &ball_rect);
 }
 
-bool is_ball_hit(SDL_Rect ball, int x, int y)
+bool is_mouse_hit(SDL_Rect ball, int x, int y)
 {
     if (ball.w == 0) return false;
     int centerX = ball.x + ball.w / 2;
     int centerY = ball.y + ball.h / 2;
     int radius = ball.w / 2;
     return sqrt((centerX - x)*(centerX - x) + (centerY - y)*(centerY - y)) < radius;
+}
+
+bool is_balls_hit(SDL_Rect ball1, SDL_Rect ball2)
+{
+    if (ball1.w == 0 || ball2.w == 0) return false;
+
+    int cX1 = ball1.x + ball1.w / 2;
+    int cY1 = ball1.y + ball1.h / 2;
+    int rad1 = ball1.w / 2;
+
+    int cX2 = ball2.x + ball2.w / 2;
+    int cY2 = ball2.y + ball2.h / 2;
+    int rad2 = ball2.w / 2;
+
+    return
+        sqrt((cX1 - cX2)*(cX1 - cX2) + (cY1 - cY2)*(cY1 - cY2)) < (rad1 + rad2);
 }

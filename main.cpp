@@ -29,10 +29,7 @@ int main(int argc, char **argv) {
 
     SDL_Event e;
     bool close = false;
-    double x = START_X,
-            y = START_Y,
-            x_vel = 0,
-            y_vel = 0;
+    int activated_ball = BALL_COUNT; // if == BALL_COUNT, than inactive
 
     auto begin = chrono::high_resolution_clock::now();
     auto end = chrono::high_resolution_clock::now();
@@ -41,19 +38,57 @@ int main(int argc, char **argv) {
 
     while (!close) {
         begin = chrono::high_resolution_clock::now();
+
         while (SDL_PollEvent(&e))
             if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE)
                 close = true;
+            // если есть активный мячик
+            else if (activated_ball != BALL_COUNT)
+            {
+                if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_DOWN) {
+                    cout << "Down pressed!";
+                    balls[activated_ball].y += STEP;
+                }
+                else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_UP) {
+                    cout << "Up pressed!";
+                    balls[activated_ball].y -= STEP;
+                }
+                else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RIGHT) {
+                    cout << "Right pressed!";
+                    balls[activated_ball].x += STEP;
+                }
+                else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_LEFT) {
+                    cout << "Left pressed!";
+                    balls[activated_ball].x -= STEP;
+                }
+                else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_DOWN) {
+                    cout << "Down released!";
+                    balls[activated_ball].y += STEP;
+                }
+                else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_UP) {
+                    cout << "Up released!";
+                    balls[activated_ball].y -= STEP;
+                }
+                else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RIGHT) {
+                    cout << "Right released!";
+                    balls[activated_ball].x += STEP;
+                }
+                else if (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_LEFT) {
+                    cout << "Left released!";
+                    balls[activated_ball].x -= STEP;
+                }
+            }
             else if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT)
                 for (int i = 0; i < BALL_COUNT; i++)
-                    if (is_ball_hit(balls[i], e.button.x, e.button.y)) {
-                        balls[i].w = balls[i].h = 0;
-                        k += prices[i];
-                        _itoa(k, text_val, 10);
-                        SDL_DestroyTexture(text);
-                        text = get_text_texture(rend, text_val, my_font);
+                    // если нажали на мячик, то сделать его активным
+                    if (is_mouse_hit(balls[i], e.button.x, e.button.y)) {
+//                        balls[i].w = balls[i].h = 0;
+//                        k += prices[i];
+//                        _itoa(k, text_val, 10);
+//                        SDL_DestroyTexture(text);
+//                        text = get_text_texture(rend, text_val, my_font);
+                        activated_ball = i;
                     }
-
 
         SDL_SetRenderDrawColor(rend, 0, 0, 0, 0);
         SDL_RenderClear(rend);
@@ -68,10 +103,12 @@ int main(int argc, char **argv) {
 
         SDL_RenderPresent(rend);
 
-        end = chrono::high_resolution_clock::now();
-        dur = end - begin;
-        dur_ms = (int) chrono::duration_cast<std::chrono::milliseconds>(dur).count();
-        SDL_Delay(Uint32(16 - dur_ms < 0 ? 0 : 16 - dur_ms));
+        {
+            end = chrono::high_resolution_clock::now();
+            dur = end - begin;
+            dur_ms = (int) chrono::duration_cast<std::chrono::milliseconds>(dur).count();
+            SDL_Delay(Uint32(16 - dur_ms < 0 ? 0 : 16 - dur_ms));
+        }
     }
 
 

@@ -1,4 +1,3 @@
-/* Libraries */
 #include <iostream>
 #include <cmath>
 #include <time.h>
@@ -7,7 +6,6 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 //#include <SDL2/SDL_mixer.h>
-
 
 #undef main
 
@@ -20,6 +18,7 @@ using namespace std;
 #define START_Y int(WINDOW_HEIGHT / 2)
 
 #define BALL_COUNT 5
+#define STEP 5
 
 bool SDL_Start(SDL_Window ** window, SDL_Renderer ** renderer);
 void SDL_Exit(SDL_Window * w, SDL_Renderer * r);
@@ -29,4 +28,6 @@ void init_balls(SDL_Rect balls[], int prices[], int count);
 void draw_text(SDL_Renderer* renderer, SDL_Texture* texture);
 void draw_balls(SDL_Renderer* renderer, SDL_Rect balls[], int count, SDL_Texture* texture);
 void draw_ball_text(SDL_Renderer* renderer, SDL_Texture* texture, SDL_Rect ball_rect);
-bool is_ball_hit(SDL_Rect ball, int x, int y);
+
+bool is_mouse_hit(SDL_Rect ball, int x, int y);
+bool is_balls_hit(SDL_Rect ball1, SDL_Rect ball2);
