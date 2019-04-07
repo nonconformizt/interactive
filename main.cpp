@@ -29,6 +29,14 @@ int main(int argc, char **argv) {
     SDL_Texture * active = SDL_CreateTextureFromSurface(rend, ballImage);
     SDL_FreeSurface(ballImage);
 
+    // load WAV file
+
+    SDL_AudioSpec hit_sound_spec;
+    Uint32 hit_sound_len;
+    Uint8 *hit_sound_buf;
+    SDL_LoadWAV("hit.wav", &hit_sound_spec, &hit_sound_buf, &hit_sound_len);
+    // open audio device
+    SDL_AudioDeviceID device = SDL_OpenAudioDevice(nullptr, 0, &hit_sound_spec, nullptr, 0);
 
     SDL_Event e;
     bool close = false,
@@ -72,8 +80,11 @@ int main(int argc, char **argv) {
             else if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT)
                 for (int i = 0; i < BALL_COUNT; i++)
                     // если нажали на мячик, то сделать его активным
-                    if (is_mouse_hit(balls[i], e.button.x, e.button.y))
+                    if (is_mouse_hit(balls[i], e.button.x, e.button.y)) {
+                        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Title", "Смотрите чё могу",
+                                                 nullptr);
                         activated_ball = i;
+                    }
 
         SDL_SetRenderDrawColor(rend, 0, 0, 0, 0);
         SDL_RenderClear(rend);
@@ -92,6 +103,9 @@ int main(int argc, char **argv) {
                 if (i == activated_ball)
                     continue;
                 else if (is_balls_hit(balls[i], balls[activated_ball])) {
+                    SDL_ClearQueuedAudio(device);
+                    SDL_QueueAudio(device, hit_sound_buf, hit_sound_len);
+                    SDL_PauseAudioDevice(device, 0);
                     balls[i].w = balls[i].h = 0;
                     k += prices[i];
                     _itoa(k, text_val, 10);

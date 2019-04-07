@@ -5,7 +5,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-//#include <SDL2/SDL_mixer.h>
 
 #undef main
 
@@ -15,7 +14,7 @@ using namespace std;
 #define WINDOW_HEIGHT (720)
 
 #define BALL_COUNT 30
-#define STEP 3
+#define STEP 5
 
 bool SDL_Start(SDL_Window ** window, SDL_Renderer ** renderer);
 void SDL_Exit(SDL_Window * w, SDL_Renderer * r);

@@ -2,7 +2,7 @@
 
 bool SDL_Start(SDL_Window **window, SDL_Renderer **renderer)
 {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
         cout << "Initialization failed! \n";
         return false;
     }
